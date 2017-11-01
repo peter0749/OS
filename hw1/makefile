@@ -1,6 +1,6 @@
 all: hw1 server
 hw1: hw1.c
-	gcc hw1.c -o hw1
+	gcc hw1.c ${ARGS} -o hw1
 server: create_shm.c
 	gcc create_shm.c -o server
 clean:

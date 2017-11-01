@@ -10,7 +10,12 @@ int segment_id;
 
 int main(int argc, char **argv) {
     int i, ret;
-    if (argc<2) exit(-1);
+    if (argc<2) {
+        fprintf(stderr, "Please pass Shared Memory ID as an argument!\n");
+        fprintf(stderr, "Usage: ./hw1 YOUR_SHM_ID\n");
+        fprintf(stderr, "YOUR_SHM_ID can be obtained by exectuing ./server\n");
+        exit(-1);
+    }
     segment_id = atoi(argv[1]);
     ret = shmctl(segment_id, IPC_STAT, &shmd);
     if (ret<0) {
