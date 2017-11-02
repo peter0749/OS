@@ -1,9 +1,5 @@
-all: hw1 server
+all: hw1
 hw1: hw1.c
-	gcc hw1.c ${ARGS} -o hw1
-server: create_shm.c
-	gcc create_shm.c -o server
+	gcc hw1.c -o hw1
 clean:
-	rm -f hw1 server
-clear_all_ipcs: hw1
-	./clean_ipcs
+	rm -f hw1
