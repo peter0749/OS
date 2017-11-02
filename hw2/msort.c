@@ -78,7 +78,6 @@ void devide(char *array , size_t block, int L, int R, int (*cmp)(const void *a, 
 void *devide_thread(void *init){
     MSORT_ARGS *s = (MSORT_ARGS*)init;
     devide(s->array,s->block,s->L,s->R,s->cmp,s->depth, s->MAXDEPTH);
-    pthread_exit(NULL);
 }
 #endif
 
