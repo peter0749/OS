@@ -29,5 +29,6 @@ int main(int argc, char **argv) {
     for (i=0; i<array_size; ++i) array[i] = rand();
     qsort(array, array_size, sizeof(array[0]), cmp);
     printf("%lld\n", sum(array, array_size));
+    free(array);
     return 0;
 }

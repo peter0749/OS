@@ -3,6 +3,7 @@
  */
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 #include "msort.h"
 
 void merge(char *array, size_t block, int L, int M, int R, int (*cmp)(const void *a, const void *b)){
@@ -32,19 +33,37 @@ void devide(char *array , size_t block, int L, int R, int (*cmp)(const void *a, 
     int M=(L+R)>>1;
 #ifdef PARALLEL
     if(depth < MAXDEPTH){
-        MSORT_ARGS arg1 = 
-        {
-            array, block, L, M, cmp, depth+1
-        };
-        MSORT_ARGS arg2 = 
-        {
-            array, block, M+1, R, cmp, depth+1
-        };
-        pthread_t thread1, thread2;
-        if(pthread_create(&thread1, NULL, devide_thread, (void*)(&arg1))) exit(-1);
-        if(pthread_create(&thread2, NULL, devide_thread, (void*)(&arg2))) exit(-1);
-        pthread_join(thread1, NULL);
-        pthread_join(thread2, NULL);
+        MSORT_ARGS *arg1 = NULL;
+        arg1 = (MSORT_ARGS*)malloc(sizeof(MSORT_ARGS));
+        assert(arg1!=NULL);
+        MSORT_ARGS *arg2 = NULL;
+        arg2 = (MSORT_ARGS*)malloc(sizeof(MSORT_ARGS));
+        assert(arg2!=NULL);
+        arg1->array = array;
+        arg1->block = block;
+        arg1->L = L;
+        arg1->R = M;
+        arg1->cmp = cmp;
+        arg1->depth = depth+1;
+        arg1->MAXDEPTH = MAXDEPTH;
+        arg2->array = array;
+        arg2->block = block;
+        arg2->L = M+1;
+        arg2->R = R;
+        arg2->cmp = cmp;
+        arg2->depth = depth+1;
+        arg2->MAXDEPTH = MAXDEPTH;
+        pthread_t *thread1=NULL, *thread2=NULL;
+        thread1 = (pthread_t*)malloc(sizeof(thread1));
+        assert(thread1!=NULL);
+        thread2 = (pthread_t*)malloc(sizeof(thread1));
+        assert(thread2!=NULL);
+        if(pthread_create(thread1, NULL, devide_thread, (void*)(arg1))) exit(-1);
+        if(pthread_create(thread2, NULL, devide_thread, (void*)(arg2))) exit(-1);
+        pthread_join(*thread1, NULL);
+        pthread_join(*thread2, NULL);
+        free(arg1), free(arg2);
+        free(thread1), free(thread2);
     }else{
         devide(array, block, L,M,cmp, depth+1, MAXDEPTH);
         devide(array, block, M+1, R,cmp, depth+1, MAXDEPTH);

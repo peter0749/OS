@@ -20,7 +20,8 @@ int main(int argc, char **argv) {
     size_t array_size = atoi(argv[2]);
     int *array = (int*)malloc(sizeof(int)*array_size);
     for (i=0; i<array_size; ++i) array[i] = rand();
-    mymergesort(array, array_size, sizeof(array[0]), 1, cmp);
+    mymergesort(array, array_size, sizeof(array[0]), 2, cmp);
     printf("%lld\n", threadedsum(array, array_size, 4));
+    free(array);
     return 0;
 }
