@@ -15,13 +15,15 @@ int main(int argc, char **argv) {
         fprintf(stderr, "Usage: ./hw2 seed array_size\n");
         exit(1);
     }
+    int MAXCORE=8;
+    if (argc>3) MAXCORE=atoi(argv[3]);
     int seed = atoi(argv[1]), i=0;
     srand(seed);
     size_t array_size = atoi(argv[2]);
     int *array = (int*)malloc(sizeof(int)*array_size);
     for (i=0; i<array_size; ++i) array[i] = rand();
-    mymergesort(array, array_size, sizeof(array[0]), 2, cmp);
-    printf("%lld\n", threadedsum(array, array_size, 4));
+    mymergesort(array, array_size, sizeof(array[0]), MAXCORE, cmp);
+    printf("%lld\n", threadedsum(array, array_size, MAXCORE));
     free(array);
     return 0;
 }
