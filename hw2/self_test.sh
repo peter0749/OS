@@ -10,11 +10,9 @@ for ((i=1; i<$ARG1; ++i)); do
     seed=$RANDOM
     sync
     if ! diff -w -q <(./hw2 $seed $i) <(./valid $seed $i); then
-        rm -f a b
         AC=0
         break
     fi
-    rm -f a b
 done
 
 if [[ $AC -eq 1 ]]; then
