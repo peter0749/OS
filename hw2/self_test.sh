@@ -12,7 +12,7 @@ AC=1
 for ((i=1; i<$ARG1; ++i)); do
     seed=$RANDOM
     echo -n "Testing on check point $i ... "
-    if ! diff -w -q <(./hw2 $seed $ARG2) <(./valid $seed $ARG2); then
+    if ! diff -w -q <(./hw2 $seed $ARG2) <(./valid $seed $ARG2) &> /dev/null; then
         AC=0
         echo "wrong!"
         break
