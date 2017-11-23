@@ -7,6 +7,7 @@
 
 typedef struct{
     char *array;
+    char *buffer;
     size_t block;
     int L, R;
     int (*cmp)(const void *, const void *);
@@ -14,8 +15,8 @@ typedef struct{
     int MAXDEPTH;
 }MSORT_ARGS;
 
-void merge(char *, size_t, int, int, int, int (*cmp)(const void *, const void *));
-void devide(char *, size_t, int, int, int (*cmp)(const void *, const void *) ,int, int);
+void merge(char *, char *, size_t, int, int, int, int (*cmp)(const void *, const void *));
+void devide(char *, char *, size_t, int, int, int (*cmp)(const void *, const void *) ,int, int);
 void *devide_thread(void*);
 void mymergesort(void *, size_t , size_t , int, int (*cmp)(const void *, const void *));
 

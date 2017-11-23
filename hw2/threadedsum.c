@@ -10,6 +10,8 @@ void *subproblem(void *_args) {
     int *end = p+args->num;
     args->sum = 0LL;
     for (;q<end;++p,++q) args->sum += *q - *p;
+    pthread_exit(0);
+    return NULL;
 }
 
 long long int threadedsum(int *array, size_t num, size_t thread_num) {
