@@ -41,61 +41,59 @@ void devide(char const *array , char const *buffer, const size_t block, const in
     //pass
     if(L==R)return;
     int M=(L+R)>>1;
-    if(depth < MAXDEPTH){
-        MSORT_ARGS *arg1 = NULL;
-#ifndef __APPLE__
-        arg1 = (MSORT_ARGS*)aligned_alloc(sizeof(MSORT_ARGS), sizeof(MSORT_ARGS));
-#else
-        arg1 = (MSORT_ARGS*)valloc(sizeof(MSORT_ARGS));
-#endif
-        assert(arg1!=NULL);
-        MSORT_ARGS *arg2 = NULL;
-#ifndef __APPLE__
-
-        arg2 = (MSORT_ARGS*)aligned_alloc(sizeof(MSORT_ARGS), sizeof(MSORT_ARGS));
-#else
-        arg2 = (MSORT_ARGS*)valloc(sizeof(MSORT_ARGS));
-#endif
-        assert(arg2!=NULL);
-        arg1->array = array;
-        arg1->buffer = buffer;
-        arg1->block = block;
-        arg1->L = L;
-        arg1->R = M;
-        arg1->cmp = cmp;
-        arg1->depth = depth+1;
-        arg1->MAXDEPTH = MAXDEPTH;
-        arg2->array = array;
-        arg2->buffer = buffer;
-        arg2->block = block;
-        arg2->L = M+1;
-        arg2->R = R;
-        arg2->cmp = cmp;
-        arg2->depth = depth+1;
-        arg2->MAXDEPTH = MAXDEPTH;
-        pthread_t *thread1=NULL, *thread2=NULL;
-        thread1 = (pthread_t*)malloc(sizeof(thread1));
-        assert(thread1!=NULL);
-        thread2 = (pthread_t*)malloc(sizeof(thread1));
-        assert(thread2!=NULL);
-        int re1=0, re2=0;
-        if((re1=(pthread_create(thread1, NULL, devide_thread, (void*)(arg1))))) {
-            qsort((void*)(array+L*block), M-L+1, block, cmp);
-        }
-        if((re2=(pthread_create(thread2, NULL, devide_thread, (void*)(arg2))))) {
-            qsort((void*)(array+(M+1)*block), R-M, block, cmp);
-        }
-        if (!re1)
-            pthread_join(*thread1, NULL);
-        if (!re2)
-            pthread_join(*thread2, NULL);
-        free(arg1), free(arg2);
-        free(thread1), free(thread2);
-        merge(array, buffer, block, L, M, R, cmp);
-    }else{
+    if(depth >= MAXDEPTH) {
         qsort((void*)(array+L*block), R-L+1, block, cmp);
         return;
     }
+    MSORT_ARGS *arg1 = NULL;
+#ifndef __APPLE__
+    arg1 = (MSORT_ARGS*)aligned_alloc(sizeof(MSORT_ARGS), sizeof(MSORT_ARGS));
+#else
+    arg1 = (MSORT_ARGS*)valloc(sizeof(MSORT_ARGS));
+#endif
+    assert(arg1!=NULL);
+    MSORT_ARGS *arg2 = NULL;
+#ifndef __APPLE__
+
+    arg2 = (MSORT_ARGS*)aligned_alloc(sizeof(MSORT_ARGS), sizeof(MSORT_ARGS));
+#else
+    arg2 = (MSORT_ARGS*)valloc(sizeof(MSORT_ARGS));
+#endif
+    assert(arg2!=NULL);
+    arg1->array = array;
+    arg1->buffer = buffer;
+    arg1->block = block;
+    arg1->L = L;
+    arg1->R = M;
+    arg1->cmp = cmp;
+    arg1->depth = depth+1;
+    arg1->MAXDEPTH = MAXDEPTH;
+    arg2->array = array;
+    arg2->buffer = buffer;
+    arg2->block = block;
+    arg2->L = M+1;
+    arg2->R = R;
+    arg2->cmp = cmp;
+    arg2->depth = depth+1;
+    arg2->MAXDEPTH = MAXDEPTH;
+    pthread_t *thread1=NULL, *thread2=NULL;
+    thread1 = (pthread_t*)malloc(sizeof(thread1));
+    assert(thread1!=NULL);
+    thread2 = (pthread_t*)malloc(sizeof(thread1));
+    assert(thread2!=NULL);
+    int re1=0, re2=0;
+    if((re1=(pthread_create(thread1, NULL, devide_thread, (void*)(arg1))))) {
+        qsort((void*)(array+L*block), M-L+1, block, cmp);
+    }
+    if((re2=(pthread_create(thread2, NULL, devide_thread, (void*)(arg2))))) {
+        qsort((void*)(array+(M+1)*block), R-M, block, cmp);
+    }
+    if (!re1)
+        pthread_join(*thread1, NULL);
+    if (!re2)
+        pthread_join(*thread2, NULL);
+    free(arg1), free(arg2);
+    free(thread1), free(thread2);
     merge(array, buffer, block, L, M, R, cmp);
 }
 
