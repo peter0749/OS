@@ -6,8 +6,8 @@
 #include <pthread.h>
 
 typedef struct{
-    char *array;
-    char *buffer;
+    char const *array;
+    char const *buffer;
     size_t block;
     int L, R;
     int (*cmp)(const void *, const void *);
@@ -15,9 +15,6 @@ typedef struct{
     int MAXDEPTH;
 }MSORT_ARGS;
 
-void merge(char *, char *, size_t, int, int, int, int (*cmp)(const void *, const void *));
-void devide(char *, char *, size_t, int, int, int (*cmp)(const void *, const void *) ,int, int);
-void *devide_thread(void*);
-void mymergesort(void *, size_t , size_t , int, int (*cmp)(const void *, const void *));
+void mymergesort(void *, const size_t , const size_t , const int, int (*cmp)(const void *, const void *));
 
 #endif

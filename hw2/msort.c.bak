@@ -5,11 +5,6 @@
 #include <string.h>
 #include <assert.h>
 #include <math.h>
-#ifdef __APPLE__
-#include <sys/malloc.h>
-#else
-#include <malloc.h>
-#endif
 #include "msort.h"
 
 // both array, and temp are shared memory
@@ -43,19 +38,10 @@ void devide(char const *array , char const *buffer, const size_t block, const in
     int M=(L+R)>>1;
     if(depth < MAXDEPTH){
         MSORT_ARGS *arg1 = NULL;
-#ifndef __APPLE__
-        arg1 = (MSORT_ARGS*)aligned_alloc(sizeof(MSORT_ARGS), sizeof(MSORT_ARGS));
-#else
-        arg1 = (MSORT_ARGS*)valloc(sizeof(MSORT_ARGS));
-#endif
+        arg1 = (MSORT_ARGS*)malloc(sizeof(MSORT_ARGS));
         assert(arg1!=NULL);
         MSORT_ARGS *arg2 = NULL;
-#ifndef __APPLE__
-
-        arg2 = (MSORT_ARGS*)aligned_alloc(sizeof(MSORT_ARGS), sizeof(MSORT_ARGS));
-#else
-        arg2 = (MSORT_ARGS*)valloc(sizeof(MSORT_ARGS));
-#endif
+        arg2 = (MSORT_ARGS*)malloc(sizeof(MSORT_ARGS));
         assert(arg2!=NULL);
         arg1->array = array;
         arg1->buffer = buffer;
@@ -108,11 +94,7 @@ void *devide_thread(void *init){
 
 void mymergesort(void *array, const size_t num, const size_t block, const int MAXCORE, int (*cmp)(const void *a, const void *b)){
     int MAXDEPTH = ceil(log2(MAXCORE));
-#ifndef __APPLE__
-    char *buffer = (char*)aligned_alloc(block,num*block);
-#else
-    char *buffer = (char*)valloc(num*block);
-#endif
+    char *buffer = (char*)malloc(num*block);
     devide((char*)array, buffer, block, 0, num-1, cmp, 0, MAXDEPTH);
     free(buffer);
 }
