@@ -1,6 +1,8 @@
 #!/bin/bash
 ARG1=100 ## NUMBER OF LOOPS
-ARG2=100000 ## SIZE OF ARRAY
+ARG2=1000000 ## SIZE OF ARRAY
+STEP=$((ARG2/ARG1))
+echo "Step size: $STEP"
 if [[ $# -ge 1 ]]; then
     ARG1=$1
 fi
@@ -9,10 +11,20 @@ if [[ $# -ge 2 ]]; then
 fi
 make &> /dev/null
 AC=1
-for ((i=1; i<$ARG1; ++i)); do
+
+temp1=$(mktemp)
+temp2=$(mktemp)
+
+rm -f "log_hw2" "log_valid"
+TIMEFORMAT=%R
+
+for ((i=1; i<=$ARG1; ++i)); do
     seed=$RANDOM
     echo -n "Testing on check point $i ... "
-    if ! diff -w -q <(./hw2 $seed $ARG2) <(./valid $seed $ARG2) &> /dev/null; then
+    time (./hw2 $seed $((STEP*i)) > "$temp1") >> "log_hw2" 2>&1
+    time (./valid $seed $((STEP*i)) > "$temp2") >> "log_valid" 2>&1
+    sync
+    if ! diff -w -q "$temp1" "$temp2" &> /dev/null; then
         AC=0
         echo "wrong!"
         break
