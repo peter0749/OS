@@ -1,15 +1,15 @@
 #!/bin/bash
-ARG1=1000 ## NUMBER OF LOOPS
-ARG2=10000000 ## SIZE OF ARRAY
+ARG1=20 ## NUMBER OF LOOPS
+ARG2=10000 ## SIZE OF ARRAY
 STEP=$((ARG2/ARG1))
-echo "Step size: $STEP"
+# echo "Step size: $STEP"
 if [[ $# -ge 1 ]]; then
     ARG1=$1
 fi
 if [[ $# -ge 2 ]]; then
     ARG2=$2
 fi
-make &> /dev/null
+# make &> /dev/null
 AC=1
 
 temp1=$(mktemp)
@@ -20,7 +20,7 @@ TIMEFORMAT=%R
 
 for ((i=1; i<=$ARG1; ++i)); do
     seed=$RANDOM
-    echo -n "Testing on check point $i ... "
+    echo -n "Testing on check point $i/$ARG1 ... "
     sync
     time (./hw2 $seed $((STEP*i)) > "$temp1") >> "log_hw2" 2>&1
     sync

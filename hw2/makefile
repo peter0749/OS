@@ -1,4 +1,5 @@
 all: hw2 valid
+	./self_test.sh
 hw2: hw2.c msort.o msort.h threadedsum.o threadedsum.h
 	gcc -std=c11 hw2.c msort.o threadedsum.o -lm -pthread -O2 -o hw2
 msort.o: msort.c msort.h
