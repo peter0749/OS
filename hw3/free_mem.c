@@ -29,7 +29,7 @@ int main(int argc, char **argv) {
     getchar();
     for (i=0; i<num; ++i) free(mem[i]);
     free(mem);
-    fprintf(stderr, "Released %d GB of memory.\nProgram exit normally.", num);
+    fprintf(stderr, "Released %d GB of memory.\nProgram exit normally.\n", num);
     mem = NULL;
     return 0;
 }
