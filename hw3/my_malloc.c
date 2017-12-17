@@ -10,10 +10,11 @@ int main(void) {
     pid_t pid = getpid();
     int i=0;
     char *mem = NULL;
-    fprintf(stderr, "PID: %d\n", (int)pid);
     mem = (char*)malloc(40*MB);
+    fprintf(stderr, "PID: %d\nPress ENTER to write 40 MB.\n", (int)pid);
     getchar();
     for (i=0; i<40*MB; ++i) mem[i]=rand();
+    fprintf(stderr, "Press ENTER to exit\n");
     getchar();
     free(mem);
     mem = NULL;
