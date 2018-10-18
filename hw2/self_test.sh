@@ -1,6 +1,6 @@
 #!/bin/bash
-ARG1=20 ## NUMBER OF LOOPS
-ARG2=10000 ## SIZE OF ARRAY
+ARG1=30 ## NUMBER OF LOOPS
+ARG2=10000000 ## SIZE OF ARRAY
 STEP=$((ARG2/ARG1))
 # echo "Step size: $STEP"
 if [[ $# -ge 1 ]]; then

@@ -77,9 +77,9 @@ void devide(char const *array , char const *buffer, const size_t block, const in
     arg2->depth = depth+1;
     arg2->MAXDEPTH = MAXDEPTH;
     pthread_t *thread1=NULL, *thread2=NULL;
-    thread1 = (pthread_t*)malloc(sizeof(thread1));
+    thread1 = (pthread_t*)malloc(sizeof(pthread_t));
     assert(thread1!=NULL);
-    thread2 = (pthread_t*)malloc(sizeof(thread1));
+    thread2 = (pthread_t*)malloc(sizeof(pthread_t));
     assert(thread2!=NULL);
     int re1=0, re2=0;
     if((re1=(pthread_create(thread1, NULL, devide_thread, (void*)(arg1))))) {
